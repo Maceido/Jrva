@@ -23,7 +23,10 @@ root.title("JRVA")
 
 #frames of the animation
 frames = [PhotoImage(file='Icons/Background.gif',format = 'gif -index %i' %(i)) for i in range(60)]
-
+top = Frame(root)
+bottom = Frame(root)
+top.pack(side=TOP)
+bottom.pack(side=BOTTOM, fill=BOTH, expand=True)
 #speed of the animation
 speed = 50
 
@@ -107,6 +110,7 @@ def results():
 
     elif query == 'none':
         say("Sorry, i didnt get that. please try again.")
+        readon()
 
     else:
         say("Not sure what " + query + ' is')
@@ -125,8 +129,6 @@ def takeCommand():
             query=r.recognize_google(audio,language='en-in')
             print(f"User said:{query}\n")
         except Exception as e:
-            print(e)
-            print("say that again please..")
             return "None"
         return query
     except:
@@ -160,11 +162,12 @@ def update(ind):
 
 
 button= Button(root, image=mic_status_off,command=lambda: threading.Thread(target=readon, daemon=True).start())
-
+c = Button(root, text="Commands", width=9, height=2)
 text= Label(root, text= "Mic Off")
 label = Label(root,text= "")
 label.pack()
 button.pack()
+c.pack(in_=bottom, side=LEFT)
 root.after(0, update, 0)
 threading.Thread(target=saytime, daemon=True).start()
 text.pack()
