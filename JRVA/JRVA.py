@@ -20,16 +20,19 @@ from selenium import webdriver
 
 root = Tk()
 root.title("JRVA")
-
+photo = PhotoImage(file = "Icons/logo.png")
 #frames of the animation
 frames = [PhotoImage(file='Icons/Background.gif',format = 'gif -index %i' %(i)) for i in range(60)]
-top = Frame(root)
+
+
 bottom = Frame(root)
-top.pack(side=TOP)
 bottom.pack(side=BOTTOM, fill=BOTH, expand=True)
+
+
 #speed of the animation
 speed = 50
-
+with open('Commands.txt', 'r') as file:
+    data = file.read()
 #speed rate of the voice
 newVoiceRate = 175
 
@@ -69,51 +72,51 @@ def saytime():
 
 #gets the command and activates it
 def results():
-    query=takeCommand().lower()
-    if 'who are you' in query:
-        say('I am Jrva.')
-    
-    elif 'james' in query:
-        say('opening James Rumsey home page')
-        webbrowser.open('jamesrumsey.com')
+    try:
+        query=takeCommand().lower()
+        if 'who are you' in query:
+            say('I am Jrva.')
+        elif 'james' in query:
+            say('opening James Rumsey home page')
+            webbrowser.open('jamesrumsey.com')
+        elif 'adult programs' in query:
+            say('opening James Rumsey adult programs')
+            webbrowser.open('https://www.jamesrumsey.com/category/adult-programs/')
+        elif 'high school progrmas' in query:
+            say('opening James Rumsey high school programs')
+            webbrowser.open('https://www.jamesrumsey.com/category/high-school-programs/')
+        elif 'nursing' in query:
+            say('opening James Rumsey nursing program')
+            webbrowser.open('https://www.jamesrumsey.com/academics/adult-programs/practical-nursing/')
 
-    elif 'adult programs' in query:
-        say('opening James Rumsey adult programs')
-        webbrowser.open('https://www.jamesrumsey.com/category/adult-programs/')
+        elif 'adult education' in query:
+           say('opening adult education')
+           webbrowser.open('https://www.jamesrumsey.com/academics/adult-basic-education/')
 
-    elif 'high school progrmas' in query:
-        say('opening James Rumsey high school programs')
-        webbrowser.open('https://www.jamesrumsey.com/category/high-school-programs/')
+        elif 'youtube' in query:
+            say('Opening Youtube')
+            webbrowser.open("youtube.com")
 
-    elif 'nursing' in query:
-        say('opening James Rumsey nursing program')
-        webbrowser.open('https://www.jamesrumsey.com/academics/adult-programs/practical-nursing/')
+        elif 'google' in query:
+            say('Opening Google')
+            webbrowser.open("google.com")
 
-    elif 'adult education' in query:
-        say('opening adult education')
-        webbrowser.open('https://www.jamesrumsey.com/academics/adult-basic-education/')
+        elif 'time' in query:
+            strTime=datetime.datetime.now().strftime("%H:%M:%S")
+            say(f"the time is {strTime}")
 
-    elif 'youtube' in query:
-        say('Opening Youtube')
-        webbrowser.open("youtube.com")
+        elif 'how are you' in query:
+            say("I am good. What about you..")
 
-    elif 'google' in query:
-        say('Opening Google')
-        webbrowser.open("google.com")
+        elif query == 'none':
+            say("Sorry, i didnt get that. please try again.")
+            readon()
 
-    elif 'time' in query:
-           strTime=datetime.datetime.now().strftime("%H:%M:%S")
-           say(f"the time is {strTime}")
+        else:
+            say("Not sure what " + query + ' is')
+    except:
+        readoff()
 
-    elif 'how are you' in query:
-        say("I am good. What about you..")
-
-    elif query == 'none':
-        say("Sorry, i didnt get that. please try again.")
-        readon()
-
-    else:
-        say("Not sure what " + query + ' is')
         
 #listens for a command
 def takeCommand():
@@ -139,16 +142,30 @@ def takeCommand():
 #activates the mic and updates the image
 def readon():
     button.config(image=mic_status_on,command=lambda: threading.Thread(target=readoff, daemon=True).start())
-    text.config(text= "Mic On")
     threading.Thread(target=results, daemon=True).start()
     
 
-        
+# function to open a new window 
+# on a button click
+def openNewWindow():
+      
+    # Toplevel object which will 
+    # be treated as a new window
+    newWindow = Toplevel(root)
+  
+    # sets the title of the
+    # Toplevel widget
+    newWindow.title("Jrva")
+  
+    # sets the geometry of toplevel
+    newWindow.geometry("355x250")
+  
+    # A Label widget to show in toplevel
+    Label(newWindow,text =data,relief=RIDGE,justify=LEFT).pack()
 
 #turns off the mic
 def readoff():
     button.config(image=mic_status_off,command=lambda: threading.Thread(target=readon, daemon=True).start())
-    text.config(text= "Mic Off")
 
 #updates the animation
 def update(ind):
@@ -156,20 +173,22 @@ def update(ind):
     ind += 1
     if ind == 60:
         ind = 0
-    label.configure(image=frame,compound='center',font='impact',foreground="gold")
+    label.configure(image=frame,compound='center',font='impact',foreground="orange")
     root.after(speed, update, ind)
     
 
 
 button= Button(root, image=mic_status_off,command=lambda: threading.Thread(target=readon, daemon=True).start())
-c = Button(root, text="Commands", width=9, height=2)
-text= Label(root, text= "Mic Off")
-label = Label(root,text= "")
+c = Button(root, text="Commands",command = openNewWindow, width=9, height=2)
+text= Label(root)
+label = Label(root)
 label.pack()
 button.pack()
+root.iconphoto(False, photo)
+root.resizable(False, False)
 c.pack(in_=bottom, side=LEFT)
 root.after(0, update, 0)
 threading.Thread(target=saytime, daemon=True).start()
-text.pack()
+
 root.mainloop()
 
