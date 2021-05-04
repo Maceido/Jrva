@@ -117,15 +117,19 @@ def results():
     except:
         readoff()
 
-        
 #listens for a command
 def takeCommand():
     try:
         r=sr.Recognizer()
         with sr.Microphone() as source:
-            say("Listening..")
-            r.pause_threshold=1
-            audio=r.listen(source)
+            try:
+                say("Listening..")
+                r.pause_threshold=1
+                r.dynamic_energy_threshold = False  
+                r.listen(source,timeout=5.0)      
+                audio=r.listen(source)
+            except:
+                audio = ''
         try:
             readoff()
             say("One second")
