@@ -20,13 +20,14 @@ from selenium import webdriver
 
 root = Tk()
 root.title("JRVA")
+root.configure(bg='black')
 photo = PhotoImage(file = "Icons/logo.png")
 #frames of the animation
 frames = [PhotoImage(file='Icons/Background.gif',format = 'gif -index %i' %(i)) for i in range(60)]
 
 
 bottom = Frame(root)
-bottom.pack(side=BOTTOM, fill=BOTH, expand=True)
+bottom.pack(side=BOTTOM)
 
 
 #speed of the animation
@@ -182,15 +183,16 @@ def update(ind):
     
 
 
-button= Button(root, image=mic_status_off,command=lambda: threading.Thread(target=readon, daemon=True).start())
-c = Button(root, text="Commands",command = openNewWindow, width=9, height=2)
+button= Button(root,activebackground="black",borderwidth=0,background="black", width=50, height=50,image=mic_status_off,command=lambda: threading.Thread(target=readon, daemon=True).start())
+c = Button(root,background='#DCAE96', text="Commands",command = openNewWindow, width=9, height=2)
 text= Label(root)
-label = Label(root)
+label = Label(root,background="black")
 label.pack()
 button.pack()
 root.iconphoto(False, photo)
 root.resizable(False, False)
-c.pack(in_=bottom, side=LEFT)
+c.pack(side=LEFT)
+root.geometry('600x500')
 root.after(0, update, 0)
 threading.Thread(target=saytime, daemon=True).start()
 
