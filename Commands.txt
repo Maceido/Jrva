@@ -1,0 +1,16 @@
+Google -> Opens Google
+
+Youtube -> Opens Youtube
+
+James Rumsey -> Opens Home Page
+
+Time -> Shows the current time in Military Formant
+
+Practical Nursing -> Shows the Nursing Program
+
+Adult Programs -> Shows Available Adult Programs
+
+High School Programs -> Shows Available High School Programs
+
+Open Spotify -> Runs Spotify
+
